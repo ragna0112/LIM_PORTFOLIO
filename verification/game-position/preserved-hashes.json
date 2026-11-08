@@ -1,0 +1,21 @@
+{
+  "src/projects.ts": "34d877ef27ae170ef8c9a9e410ced919b5733ecd5fa15a17e275ef277729deb5",
+  "src/credentials.css": "726676c2ca5f7ff3d91d2b28fccda6dcafcb278c792e25d857e5c37f6c8ccd97",
+  "src/playground/gameEngine.ts": "2f62afa4ec0ec0f47eb4d5e562e1d20545f33b2dcc3c50de8d4faf9923e16765",
+  "src/playground/gameModel.ts": "bcea9918a868f46b2fe518334e2b2b61a7bc3a6373a849cc907aef2addf905b4",
+  "src/playground/gameConfig.ts": "d37f95c80e26720276b62a8cd95ada71e248d8cce920cbbc61fee1f6afdcba2e",
+  "src/playground/playground.css": "24d21b51871a5d82f4c767fb89e69ac4591b130f20998381c8eed0fd6b55b134",
+  "src/PortraitHero.tsx": "135e16d02020db93d72dbf84e1c93d49e72ef9f7d1cf9cc8b40b2d363852cfbd",
+  "src/constellation.ts": "45a92f824cfaee4cfd9c01d89596aca91800173711098fe3bad71d95260c3c10",
+  "public/documents/Rich-Daniel-Lim-Resume.pdf": "4b90c6a4de1256c6a8dee94c61bd0624ecc446ca418c7dc63085416d85adfe11",
+  "public/credentials/pmi-project-management-ready.webp": "a6a735b0dd15bd5b35fd4dd07f31258f356b71cf3bee7e5257589c41ac3cec4d",
+  "public/credentials/sap-generative-ai-developer-preview.webp": "6027287a63afc978036543322933bace302736b8e8c81449ba6d26094e99de9e",
+  "public/credentials/datacamp-associate-data-engineer-sql.webp": "3f9b54f126432dca41a65c15ea4769953b37df743d65360e194a0345595d6525",
+  "public/credentials/anthropic-ai-fluency.webp": "99f025701bc8ef0af42192927ccec52b367857c7d757bfece641f612d36278fa",
+  "public/credentials/anthropic-ai-fluency-preview.webp": "2501e73f3497e13e2c5524684b979e1a7bc19f01c10f42e5f0f95e5d5702cba6",
+  "public/credentials/certiport-python-preview.webp": "71e4acd4cca3e745dd331bff7e6c253561c6758d1a6ef7b7863e5ce5ef613f80",
+  "public/credentials/datacamp-associate-data-engineer-sql-preview.webp": "9a976c1f63da6b09eef06c208a5cc068287824f779bbb58a93d5cabe9142057f",
+  "public/credentials/certiport-python.webp": "0cbaed1d29245a07dee3931858db2216d9a3557c4ff92f70832a7ff01b97ef08",
+  "public/credentials/sap-generative-ai-developer.webp": "ced389e36d3121bd19387dc13b496297a3ab5156d2bd269666be9e9700619983",
+  "public/credentials/pmi-project-management-ready-preview.webp": "a4aa28d5ac1d72d95ed6c1835b68a7b959f07296417f1cfd641a1792822436df"
+}

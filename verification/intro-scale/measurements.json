@@ -1,0 +1,167 @@
+[
+  {
+    "viewport": "1440x900",
+    "phrase": "rich-daniel",
+    "left": 115,
+    "top": 352,
+    "width": 1209,
+    "height": 194,
+    "right": 116,
+    "bottom": 354,
+    "percentage": 83.95833333333333
+  },
+  {
+    "viewport": "1440x900",
+    "phrase": "lim",
+    "left": 231,
+    "top": 156,
+    "width": 979,
+    "height": 588,
+    "right": 230,
+    "bottom": 156,
+    "percentage": 67.98611111111111
+  },
+  {
+    "viewport": "1440x900",
+    "phrase": "portfolio",
+    "left": 115,
+    "top": 339,
+    "width": 1209,
+    "height": 221,
+    "right": 116,
+    "bottom": 340,
+    "percentage": 83.95833333333333
+  },
+  {
+    "viewport": "1920x1080",
+    "phrase": "rich-daniel",
+    "left": 154,
+    "top": 410,
+    "width": 1613,
+    "height": 260,
+    "right": 153,
+    "bottom": 410,
+    "percentage": 84.01041666666667
+  },
+  {
+    "viewport": "1920x1080",
+    "phrase": "lim",
+    "left": 310,
+    "top": 150,
+    "width": 1298,
+    "height": 779,
+    "right": 312,
+    "bottom": 151,
+    "percentage": 67.60416666666667
+  },
+  {
+    "viewport": "1920x1080",
+    "phrase": "portfolio",
+    "left": 154,
+    "top": 393,
+    "width": 1610,
+    "height": 294,
+    "right": 156,
+    "bottom": 393,
+    "percentage": 83.85416666666666
+  },
+  {
+    "viewport": "1366x768",
+    "phrase": "rich-daniel",
+    "left": 109,
+    "top": 291,
+    "width": 1146,
+    "height": 185,
+    "right": 111,
+    "bottom": 292,
+    "percentage": 83.89458272327965
+  },
+  {
+    "viewport": "1366x768",
+    "phrase": "lim",
+    "left": 219,
+    "top": 105,
+    "width": 927,
+    "height": 556,
+    "right": 220,
+    "bottom": 107,
+    "percentage": 67.8623718887262
+  },
+  {
+    "viewport": "1366x768",
+    "phrase": "portfolio",
+    "left": 109,
+    "top": 279,
+    "width": 1149,
+    "height": 209,
+    "right": 108,
+    "bottom": 280,
+    "percentage": 84.11420204978039
+  },
+  {
+    "viewport": "768x1024",
+    "phrase": "rich-daniel",
+    "left": 60,
+    "top": 458,
+    "width": 647,
+    "height": 107,
+    "right": 61,
+    "bottom": 459,
+    "percentage": 84.24479166666666
+  },
+  {
+    "viewport": "768x1024",
+    "phrase": "lim",
+    "left": 115,
+    "top": 350,
+    "width": 537,
+    "height": 324,
+    "right": 116,
+    "bottom": 350,
+    "percentage": 69.921875
+  },
+  {
+    "viewport": "768x1024",
+    "phrase": "portfolio",
+    "left": 61,
+    "top": 453,
+    "width": 646,
+    "height": 118,
+    "right": 61,
+    "bottom": 453,
+    "percentage": 84.11458333333334
+  },
+  {
+    "viewport": "390x844",
+    "phrase": "rich-daniel",
+    "left": 26,
+    "top": 395,
+    "width": 336,
+    "height": 54,
+    "right": 28,
+    "bottom": 395,
+    "percentage": 86.15384615384616
+  },
+  {
+    "viewport": "390x844",
+    "phrase": "lim",
+    "left": 54,
+    "top": 337,
+    "width": 280,
+    "height": 168,
+    "right": 56,
+    "bottom": 339,
+    "percentage": 71.7948717948718
+  },
+  {
+    "viewport": "390x844",
+    "phrase": "portfolio",
+    "left": 26,
+    "top": 390,
+    "width": 336,
+    "height": 62,
+    "right": 28,
+    "bottom": 392,
+    "percentage": 86.15384615384616
+  }
+]

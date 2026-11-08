@@ -1,0 +1,20 @@
+{
+  "source": "/Users/rich/Downloads/picture rich.NEF",
+  "decoder": "macOS sips / ImageIO Camera RAW",
+  "orientedSource": {
+    "width": 4000,
+    "height": 6000
+  },
+  "crop": {
+    "left": 760,
+    "top": 520,
+    "width": 2200,
+    "height": 3600
+  },
+  "output": {
+    "width": 660,
+    "height": 1080
+  },
+  "processing": "Feathered green chroma key, monochrome conversion, bottom fade. No face generation or reshaping.",
+  "sourceSHA256": "34388c1fc3a4a8a642ca7ef85d24fb6ac9fcb98007fbff18fc89e8d353c9e8e8"
+}
