@@ -109,7 +109,7 @@ function App() {
     <main id="main"><section className="hero portrait-hero" id="home" aria-labelledby="hero-title">
       <PortraitHero active={loading} staticMode={staticMode} onFinish={finishIntro}/>
       <motion.div className="hero-content" initial={{opacity:staticMode?0:1}} animate={{opacity:1}} transition={{duration:.18}}>
-        <div className="hero-top mono"><span><i className="status-dot"/> {profile.location.toUpperCase()}</span><span className="tiny-star" aria-hidden="true">✳</span></div>
+        <div className="hero-top mono"><span className="hero-location"><span className="location-asterisk" aria-hidden="true">✳</span>{profile.location.toUpperCase()}</span></div>
         <div className="hero-identity">
           <h1 id="hero-title" tabIndex={-1} aria-label={profile.name}><span className="chrome">{profile.displayName[0]}</span><span className="chrome">{profile.displayName[1]}<span className="hero-period">.</span></span></h1>
           <p className="hero-role">{profile.title} <span>· {profile.specialization}</span></p>
