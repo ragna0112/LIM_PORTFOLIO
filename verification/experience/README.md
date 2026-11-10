@@ -5,7 +5,7 @@ Source: `/Users/rich/Downloads/Rich Daniel A. Lim - Briefcase.pdf`, inspected as
 Content configuration: `src/projects.ts` (hero description and typed Experience entries).
 Page composition: `src/main.tsx` (single location label, removed kicker, joined role, Experience after Credentials).
 Styling: `src/experience.css` (editorial rows), `src/portrait.css` (removed unused kicker styling and role wrapping).
-Navigation: `src/sections.ts` (six numbered sections and five header items), `src/Navigation.tsx` (renders only header items but observes every section), `src/navigation.css` (Experience anchor).
+Navigation: `src/sections.ts` (five numbered main sections and an unnumbered game interlude), `src/Navigation.tsx` (renders only header items but observes every section), `src/navigation.css` (Experience anchor).
 
 The game remains at #game, observed for active-state calculation but absent from header menus; its implementation is unchanged. The updated resume is copied byte-for-byte to its unchanged public URL `/documents/Rich-Daniel-Lim-Resume.pdf` and source archive. Resume SHA and page count in `source-assets/credentials/manifest.json` now reflect the updated document. All certificate metadata and assets are unchanged.
 

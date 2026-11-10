@@ -130,11 +130,11 @@ See `verification/credentials/RESULTS.md` for the complete asset mapping, genera
 
 ## Header and page-section numbering
 
-`src/sections.ts` is the single source for page IDs, labels, hrefs, eyebrow labels and numbers: Work 01, About 02, Credentials 03, Play 04 and Contact 05. Hero is unnumbered. Project-card and capability-item numbers remain separate; the capability section's stale page-number prefix is removed.
+`src/sections.ts` is the single source for page IDs, labels, hrefs, eyebrow labels and numbers: Work 01, About 02, Credentials 03, Experience 04 and Contact 05. Hero and the Hello World interactive interlude are unnumbered. The game stays after Experience and before Contact, remains observed for active-section tracking, and has no header link. Project-card and capability-item numbers remain separate; the capability section's stale page-number prefix is removed.
 
 `src/Navigation.tsx` renders the right-aligned desktop header and an accessible native-dialog menu at widths up to 900px. The menu locks scrolling only while open, contains keyboard focus, supports Escape/Close, closes on selection or desktop resize and restores focus/scroll. Navigation selects real in-page sections, never launches the game. IntersectionObserver marks the visible numbered section with `aria-current="location"`; it does not write hashes while scrolling.
 
-Header selections update the URL hash and focus the destination. Every full page load clears stale hashes with replaceState and keeps the intro at Home. Completion and Skip reveal Hero at scroll zero; subsequent header selections, hash changes and browser back/forward align normally below the sticky header. Reduced motion uses instant scrolling. `src/navigation.css` reserves the existing 86px / 72px header heights, aligns content with page margins, preserves quiet counters and hides the decorative cursor while interacting with the header.
+Header selections update the URL hash and focus the destination. Every full page load clears stale hashes with replaceState and keeps the intro at Home. Completion reveals Hero at scroll zero; subsequent header selections, hash changes and browser back/forward align normally below the sticky header. Reduced motion uses instant scrolling. `src/navigation.css` reserves the existing 86px / 72px header heights, aligns content with page margins, preserves quiet counters and hides the decorative cursor while interacting with the header.
 
 Numbered eyebrows are rendered from the config in `src/main.tsx`, `src/Credentials.tsx` and `src/playground/GameSection.tsx`. See `verification/navigation/RESULTS.md` for header/numbering checks and `verification/intro-exit/RESULTS.md` for the current page-load/Home lifecycle.
 

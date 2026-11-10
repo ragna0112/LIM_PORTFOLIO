@@ -1,6 +1,6 @@
 # Header navigation and consistent numbering
 
-Updated 2026-11-07 in `/Users/rich/Documents/Development/LIM_Portfolio`.
+Updated 2026-11-11 in `/Users/rich/Documents/Development/LIM_Portfolio`.
 
 ## Central configuration
 
@@ -11,16 +11,17 @@ Updated 2026-11-07 in `/Users/rich/Documents/Development/LIM_Portfolio`.
 | work | Work | 01 | SELECTED WORK / 01 | #work |
 | about | About | 02 | ABOUT / 02 | #about |
 | credentials | Credentials | 03 | CREDENTIALS / 03 | #credentials |
-| game | Play | 04 | INTERACTIVE / 04 | #game |
+| experience | Experience | 04 | EXPERIENCE / 04 | #experience |
+| game | — | — | INTERACTIVE | #game |
 | contact | Contact | 05 | CONTACT / 05 | #contact |
 
 Home has no page number. The previous Work project-count badge is removed. The unnumbered capabilities section retains its content and item numbers, with the stale “02 /” page prefix removed. Project-card numbers /01 through /04 are unchanged.
 
 ## Header and behavior
 
-- Existing R·L logo stays at the left page margin; desktop navigation aligns at the right with consistent gaps, quiet small numbers and Contact arrow.
+- Existing RLwork logo stays at the left page margin; desktop navigation aligns at the right with consistent gaps, quiet small numbers and Contact arrow.
 - Existing header heights remain 86px desktop/tablet and 72px narrow mobile. Thin border, typography, colors and sticky layering are preserved.
-- IntersectionObserver observes Home and the five numbered sections through a band below the header; current links use `aria-current="location"` and a restrained underline/brightness state. Unnumbered content may leave numbered links inactive.
+- IntersectionObserver observes Home, the five numbered main sections, and the unnumbered game through a band below the header; current links use `aria-current="location"` and a restrained underline/brightness state. Unnumbered content may leave numbered links inactive.
 - Observer updates do not alter the URL. Header clicks update hashes, wait for fonts/two layout frames, scroll with the sticky-header offset and focus the destination. Home scrolls to zero.
 - Initial known hashes wait until the full intro finishes (or Skip/reduced motion completes it), then align after font/layout readiness. The intro remains at Home while it runs, preventing a hidden/off-screen intro on direct hash loads. Browser hash changes and back/forward navigation also align correctly.
 - Reduced motion uses instant scrolling. Existing project IDs and links remain unchanged.
@@ -64,3 +65,9 @@ Existing hero, intro, portrait, constellation, project information, all five cre
 - Desktop header and mobile/200%-equivalent menu screenshots visually reviewed: labels readable, correct numbering/order, no horizontal clipping or cursor circle over the header.
 - Production preview remains available at `http://127.0.0.1:4173/`.
 - No deployment, commit or push.
+
+## Five-section numbering update (2026-11-11)
+
+Main navigation now runs Work 01, About 02, Credentials 03, Experience 04, Contact 05. The game has `number: null`, renders `INTERACTIVE` without a suffix and remains in the full section configuration for anchor validation and active-section observation. Filtering numbered entries supplies both navigation menus. Game position, IDs, project numbering and mechanics are unchanged.
+
+Lint and production build passed. All 29 focused navigation/Experience/contact checks passed (email providers mocked). Additional browser checks at 1440px and 390px followed every main link, verified the destination hash and focus, checked the 01–05 labels, and confirmed no active header item while the game is visible. Desktop header/mobile menu captures were visually inspected. No stale Contact 06 or INTERACTIVE / 05 labels remain in source/tests/current text references. Changes are pushed to the existing `codex/contact-form` branch; no production merge or new deployment is performed by this numbering update.
