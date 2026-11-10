@@ -14,6 +14,7 @@ import {ScrollProgress,useMagneticLinks} from './InteractionPolish';
 import './polish.css';
 import {GameSection} from './playground/GameSection';
 import {Credentials,ResumeActions} from './Credentials';
+import {Contact} from './Contact';
 import {Navigation} from './Navigation';
 import {sectionEyebrow} from './sections';
 import {initializeIntroScroll,finishIntroPosition} from './introScroll';
@@ -128,7 +129,7 @@ function App() {
         <div className="experience-list">{experience.map(entry=><Reveal key={entry.id} className="experience-entry"><h3>{entry.title}</h3><div className="experience-meta"><span className="experience-organization">{entry.organization}</span><time dateTime={entry.startDate}>{entry.dates}</time><span className="experience-category mono">{entry.category}</span></div></Reveal>)}</div>
       </section>
       <GameSection/>
-      <section className="contact section-pad" id="contact" aria-labelledby="contact-title"><Reveal><span className="eyebrow mono">{sectionEyebrow('contact')}</span><div className="contact-pre mono"><span><i className="status-dot"/> GOOD WORK STARTS WITH A CONVERSATION</span><span>LET’S MAKE SOMETHING USEFUL.</span></div><h2 className="dot-type" id="contact-title">LET’S<br/>CONNECT<span>↗</span></h2><div className="contact-bottom"><p>Have a question, an idea, or a project in mind?<br/><span>Find me on GitHub. Let’s start there.</span></p><div className="contact-socials"><a className="contact-link social-link" href={profile.linkedinUrl} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${profile.name} on LinkedIn (opens in a new tab)`}>LinkedIn <ArrowUpRight aria-hidden="true" size={23}/></a><a className="contact-link" href={profile.githubUrl} target="_blank" rel="noopener noreferrer">Say hello on GitHub <ArrowUpRight size={23}/><span className="sr-only"> (opens in a new tab)</span></a><ResumeActions/></div></div></Reveal></section>
+      <Contact/>
     </main><footer><span className="footer-brand"><img src="/branding/rlwork-footer-silver.webp" width="640" height="656" alt="RLwork" loading="lazy" decoding="async"/></span><span className="mono">© {new Date().getFullYear()} {profile.name.toUpperCase()}</span><div className="footer-links"><a className="social-link" href={profile.githubUrl} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${profile.name} on GitHub (opens in a new tab)`}>GitHub <ArrowUpRight aria-hidden="true" size={12}/></a><a className="social-link" href={profile.linkedinUrl} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${profile.name} on LinkedIn (opens in a new tab)`}>LinkedIn <ArrowUpRight aria-hidden="true" size={12}/></a><ResumeActions/><a href="#home" className="mono">BACK TO TOP <ArrowUp size={14}/></a></div></footer><a className="connect-pill" href="#contact"><span className="status-dot"/> Let’s connect <ArrowUpRight size={16}/></a><Cursor/>
   </div></MotionConfig>;
 }

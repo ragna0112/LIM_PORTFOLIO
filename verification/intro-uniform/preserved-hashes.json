@@ -1,7 +1,7 @@
 {
   "src/credentials.css": "726676c2ca5f7ff3d91d2b28fccda6dcafcb278c792e25d857e5c37f6c8ccd97",
   "src/Atmosphere.tsx": "c4c50a09119dea2d2ae2bed314ff2d0fca2e8af242ffa5d69e0691e42535debd",
-  "src/main.tsx": "4ac926e010e17b91548ffba78a179dc3c4603ee71fc77fccaed565ad3dbc9c51",
+  "src/main.tsx": "5f6d677565b776917e28839f9bb560b6da03fe9bb7965b511b0f6fe391d4e586",
   "src/ProjectGallery.tsx": "0f1e6e096dba7ebe16b95e548333f84b506469c1a730b8e1ae733c1fa7ee9bd0",
   "src/projects.ts": "e1e54fca27681ad843196d803c8aa2d8d9a2a6025543a85bd749eb5709292bcf",
   "src/PortraitHero.tsx": "6674a6e6917e12af2f3a58aac55f5a1ef423a2565012a2e9e498eb866bd79ea6",

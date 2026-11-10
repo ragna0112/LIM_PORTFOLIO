@@ -1,0 +1,19 @@
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(36px,7vw,110px)}
+.contact-details h2{font-family:'Barlow Condensed',sans-serif;font-size:clamp(48px,5vw,76px);letter-spacing:-.02em;margin:0 0 32px;line-height:1}
+.contact-details address{font-style:normal;font-size:14px;line-height:1.7}
+.contact-details address p{display:flex;align-items:center;gap:14px;margin:0 0 22px;color:#c5c5bf;max-width:none}
+.contact-details address svg{flex-shrink:0;color:#aaa}
+.contact-details a{overflow-wrap:anywhere}.contact-details a:hover{color:#fff}
+.copy-email,.contact-submit{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:44px;padding:12px 18px;background:#141414;border:1px solid #777;color:#ddd;cursor:pointer;font-size:12px;transition:background .2s,border-color .2s}
+.copy-email:hover,.contact-submit:hover{background:#242424;border-color:#ddd}
+.copy-status{min-height:20px;font-size:12px;color:#aaa;margin:8px 0 20px}
+.contact-details .contact-socials{min-width:0;gap:16px;margin-top:0}.contact-details .social-link{display:flex;align-items:center;gap:12px;min-height:44px;font-size:13px}
+.contact-form-column{min-width:0}.contact-form-column h3{font-size:clamp(24px,2.4vw,34px);font-weight:500;letter-spacing:-.04em;margin:0 0 14px}
+.contact-form-column>p{font-size:14px;line-height:1.8;color:#aaa;margin:0 0 28px}
+.contact-field{margin-bottom:18px}.contact-field label{display:block;font-size:13px;color:#ccc;margin-bottom:9px}.contact-field label span{color:#999}
+.contact-field input,.contact-field textarea{display:block;width:100%;min-width:0;min-height:48px;border:1px solid #666;border-radius:0;background:#111;color:#eee;font:inherit;font-size:15px;line-height:1.6;padding:12px 14px;transition:border-color .2s}
+.contact-field textarea{resize:vertical;min-height:160px}.contact-field input:focus-visible,.contact-field textarea:focus-visible{outline:2px solid #eee;outline-offset:3px;border-color:#ccc}
+.contact-field [aria-invalid=true]{border-color:#ddd}.field-error{display:block;color:#ddd;font-size:12px;line-height:1.6;margin-top:6px}
+.contact-honeypot{display:none}.contact-submit{min-width:162px}.contact-submit:disabled{cursor:wait;opacity:.65}.form-status{min-height:44px;font-size:13px;line-height:1.7;color:#ccc;margin:16px 0 0}
+@media(max-width:850px){.contact-grid{grid-template-columns:1fr;gap:48px}.contact-details h2{font-size:54px}.contact-details address{font-size:13px}}
+@media(prefers-reduced-motion:reduce){.contact button,.contact input,.contact textarea{transition:none}}

@@ -35,7 +35,8 @@ test('fine-pointer magnetic links are bounded, keyboard stable and reset with re
   const x=parseFloat(translate);expect(Math.abs(x)).toBeGreaterThan(.2);expect(Math.abs(x)).toBeLessThanOrEqual(3);
   await link.focus();expect(await link.evaluate(el=>(el as HTMLElement).style.translate)).toBe('');
   await page.emulateMedia({reducedMotion:'reduce'});await page.mouse.move(box.x+3,box.y+box.height/2);
-  expect(await link.evaluate(el=>getComputedStyle(el).translate)).toBe('none');
+  // Chromium may serialize the zero translation as either none or 0px.
+  await expect.poll(()=>link.evaluate(el=>getComputedStyle(el).translate)).toMatch(/^(none|0px(?: 0px)?)$/);
   await page.getByRole('link',{name:'Let’s connect',exact:true}).hover();
   expect(await page.getByRole('link',{name:'Let’s connect',exact:true}).evaluate(el=>getComputedStyle(el).transform)).toBe('none');
 });

@@ -153,3 +153,26 @@ All three masks share their baseline, H-capital height, sampling rows/spacing an
 `src/introScroll.ts` initializes before React renders section anchors. It sets native restoration to manual, clears the page-load hash with `history.replaceState()` while keeping pathname/query/history state, positions the page at zero and temporarily prevents background scrolling. Completion/Skip reset zero before reveal and once on the next frame, restore root styles and automatic restoration, and remove the temporary listeners. Refreshing midway through an intro also releases normally. The app uses native scrolling; there is no separate smooth-scroll controller.
 
 `src/Navigation.tsx` no longer routes the initial hash after intro completion—the cause of the previous Work jump. Ordinary same-page header/hash/Back/Forward behavior still works, and the logo returns to Home with no section hash. Skip focuses the Home section with `preventScroll:true`; natural completion does not force focus. Typography, particle generation and timings are unchanged from the uniform-intro implementation. `verification/intro-exit/RESULTS.md` records the fix and checks.
+
+## Contact email delivery (Vercel + Resend)
+
+The Contact section submits JSON to `POST /api/contact`. The Vercel Node function sends to **richdaniel011206@gmail.com**, fixed server-side, with the validated visitor email as `reply_to`. It uses Resend's REST API, escaped HTML and plain text, with an idempotency key retained across visitor retries. Provider acceptance is required before showing success; acceptance does not guarantee inbox placement.
+
+Copy `.env.example` to `.env.local` for local server testing. Configure these **server-only** variables in Vercel for each environment when deployment is authorized:
+
+| Variable | Value |
+| --- | --- |
+| `RESEND_API_KEY` | Resend sending API key with access to the verified sending domain |
+| `CONTACT_FROM_EMAIL` | An authorized sender such as `Portfolio <contact@your-verified-domain.com>` |
+| `UPSTASH_REDIS_REST_URL` | HTTPS REST URL of an Upstash Redis database |
+| `UPSTASH_REDIS_REST_TOKEN` | Its write-capable REST token (EVAL/INCR/EXPIRE permissions) |
+
+Verify a domain you control in Resend and publish the DNS records it requires before using its mailbox as the From address. Neither the visitor's email nor the recipient Gmail is a substitute for a verified sender. The recipient is not configurable through form input or environment variables. Never use `VITE_` prefixes for secrets or commit populated `.env` files.
+
+There was no pre-existing backend/protection infrastructure. The function uses atomic Redis Lua counters: five valid attempts per IP per ten-minute window, plus 100 globally per hour. Counters expire, the IP is salted/hashed with the server-only Redis token before storage, and requests that exceed either limit receive 429. It trusts only Vercel's overwritten `x-vercel-forwarded-for` header; deploy behind Vercel's edge, not a directly exposed standalone Node server. Redis failure or missing configuration returns an error and sends no email. There is no message database. A hidden honeypot, same-origin browser check, allowed-field whitelist, 24 KB streamed request limit, bounded inputs and header-control-character rejection provide additional protection. A single visitor retry uses Resend idempotency; changing the fields starts a new enquiry.
+
+`npm run dev` and `npm run preview` serve the static Vite frontend only. Use `vercel dev` with server variables to exercise the real local function, or `npx playwright test tests/contact.spec.ts` for mocked provider and UI checks. Tests inject fake server dependencies or intercept `/api/contact`; they never send real email. Missing configuration produces the documented error message and retains the message. Use the always-visible direct email link as a fallback. Request bodies and provider error details are not logged or returned publicly.
+
+References: [Vercel Node functions](https://vercel.com/docs/functions/runtimes/node-js), [Vercel trusted request headers](https://vercel.com/docs/headers/request-headers), [Resend email API](https://resend.com/docs/api-reference/emails/send-email), [Upstash REST API](https://upstash.com/docs/redis/features/restapi).
+
+This implementation is prepared on `codex/contact-form`. Its branch-specific `vercel.json` rule disables automatic Vercel deployments for that branch, allowing a Git push without publishing the form. Other branches retain their existing deployment behavior. Do not merge into the production branch until you authorize deployment and set up the required services. See [Vercel branch deployment controls](https://vercel.com/docs/project-configuration/git-configuration).
