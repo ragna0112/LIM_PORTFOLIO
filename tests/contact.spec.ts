@@ -10,6 +10,10 @@ test('API accepts only validated fields, fixed recipient, authorized From and va
  expect(calls).toHaveLength(2);const message=JSON.parse(calls[1].options.body as string);expect(message.to).toEqual(['richdaniel011206@gmail.com']);expect(message.from).toBe(env.CONTACT_FROM_EMAIL);expect(message.reply_to).toBe(payload.email);expect(message.subject).toBe(`Portfolio enquiry from ${payload.name}`);expect(message.text).toContain(payload.message);expect(message.html).toContain('&lt;script&gt;');expect(message.html).not.toContain('<script>');expect(message.html).toContain('&amp;');expect(calls[1].options.headers).toMatchObject({'Idempotency-Key':`portfolio-${payload.submissionId}`});
  const command=JSON.parse(calls[0].options.body as string);expect(command[0]).toBe('EVAL');expect(command[1]).toContain("redis.call('INCR'");expect(command[1]).toContain("redis.call('EXPIRE'");expect(command.slice(2)).toEqual(['2',expect.stringMatching(/^contact:ip:[a-f0-9]{64}$/),'contact:global','5','600','100','3600']);expect(JSON.stringify(command)).not.toContain('203.0.113.4');
 });
+test('Resend onboarding sender is accepted for the account-owner test',async()=>{
+ const {fetcher,calls}=providerMock();const response=await createContactHandler({...env,CONTACT_FROM_EMAIL:'RLwork <onboarding@resend.dev>'},fetcher)(request());
+ expect(response.status).toBe(200);expect(JSON.parse(calls[1].options.body as string).from).toBe('RLwork <onboarding@resend.dev>');
+});
 test('invalid payloads, recipient injection, honeypot, limits and invalid email never reach external services',async()=>{
  const {fetcher,calls}=providerMock();const handle=createContactHandler(env,fetcher);
  for(const body of [{...payload,name:''},{...payload,email:'bad'},{...payload,email:'victim@example.com\r\nBcc: other@example.com'},{...payload,message:' '},{...payload,name:'a'.repeat(101)},{...payload,message:'a'.repeat(5001)},{...payload,website:'bot'},{...payload,to:'attacker@example.com'},{...payload,submissionId:'bad'},null,[],{...payload,email:4},'invalid JSON'])expect((await handle(request(body))).status).toBeGreaterThanOrEqual(400);

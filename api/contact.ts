@@ -1,4 +1,4 @@
-import {validateContact} from '../src/contactValidation';
+import {validateContact} from '../src/contactValidation.js';
 type Env=Record<string,string|undefined>;
 const failure='Your message couldn’t be sent. Please try again or email me directly.';
 const recipient='richdaniel011206@gmail.com';
