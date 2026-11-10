@@ -4,7 +4,7 @@ import {Constellation} from '../src/constellation';
 for(const[name,width,height,count]of [['desktop',1440,900,96],['wide',1920,1080,96],['tablet',768,1024,60],['mobile',390,844,34]] as const){
   test(`${name}: autonomous constellation, no manual control, safe layering`,async({page})=>{
     await page.setViewportSize({width,height});const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
-    await page.goto('/');await page.getByRole('button',{name:'Skip intro'}).click();await page.mouse.move(40,40);
+    await page.goto('/');await expect(page.locator('.intro-running')).toHaveCount(0,{timeout:11000});await page.mouse.move(40,40);
     const canvas=page.locator('.portrait-canvas');await expect(canvas).toHaveAttribute('data-ready','true');
     await expect(canvas).toHaveAttribute('data-field-count',String(count));await page.waitForTimeout(550);
     expect(Number(await canvas.getAttribute('data-field-connections'))).toBeGreaterThan(0);
@@ -17,7 +17,7 @@ for(const[name,width,height,count]of [['desktop',1440,900,96],['wide',1920,1080,
   });
 }
 test('cursor forces and extra connections fade out; portrait interaction stays independent',async({page})=>{
-  await page.setViewportSize({width:1440,height:900});await page.goto('/');await page.getByRole('button',{name:'Skip intro'}).click();
+  await page.setViewportSize({width:1440,height:900});await page.goto('/');await expect(page.locator('.intro-running')).toHaveCount(0,{timeout:11000});
   const canvas=page.locator('.portrait-canvas');await expect(canvas).toHaveAttribute('data-ready','true');
   await page.mouse.move(600,350);await page.waitForTimeout(1000);
   expect(Number(await canvas.getAttribute('data-field-near-connections'))).toBeGreaterThan(0);
@@ -31,7 +31,7 @@ test('cursor forces and extra connections fade out; portrait interaction stays i
 });
 test('touch keeps autonomous connections without pointer forces',async({browser})=>{
   const context=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true});const page=await context.newPage();
-  await page.goto('http://127.0.0.1:4173/');await page.getByRole('button',{name:'Skip intro'}).click();const canvas=page.locator('.portrait-canvas');await expect(canvas).toHaveAttribute('data-ready','true');
+  await page.goto('http://127.0.0.1:4173/');await expect(page.locator('.intro-running')).toHaveCount(0,{timeout:11000});const canvas=page.locator('.portrait-canvas');await expect(canvas).toHaveAttribute('data-ready','true');
   await page.touchscreen.tap(200,300);await page.waitForTimeout(700);
   expect(Number(await canvas.getAttribute('data-field-connections'))).toBeGreaterThan(0);expect(Number(await canvas.getAttribute('data-field-offset'))).toBe(0);
   expect(await page.locator('.atmosphere-cursor').evaluate(el=>getComputedStyle(el).display)).toBe('none');await context.close();
@@ -87,7 +87,7 @@ test('one portrait RAF, clean suspension/disposal, and restrained periodic sweep
     window.cancelAnimationFrame=id=>{pending.delete(id);recount();cancel(id);};
   });
   const errors:string[]=[];page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
-  await page.goto('/');await page.getByRole('button',{name:'Skip intro'}).click();await expect(page.locator('.portrait-canvas')).toHaveAttribute('data-ready','true');
+  await page.goto('/');await expect(page.locator('.intro-running')).toHaveCount(0,{timeout:11000});await expect(page.locator('.portrait-canvas')).toHaveAttribute('data-ready','true');
   await page.waitForTimeout(300);
   let stats=await page.evaluate(()=>(window as unknown as {__portraitRAF:{pending:number;max:number;frames:number}}).__portraitRAF);
   expect(stats.max).toBe(1);expect(stats.frames).toBeGreaterThan(0);

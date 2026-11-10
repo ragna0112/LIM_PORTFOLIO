@@ -11,7 +11,9 @@ export function PortraitHero({ active, staticMode, onFinish }: {active:boolean;s
   useEffect(()=>{
     if(staticMode)return;
     const canvas=ref.current!,hero=canvas.closest('.hero') as HTMLElement;
-    const running=startPortrait(canvas,hero,{active:latest.current.active,onFinish:()=>latest.current.onFinish()});
+    let running:ReturnType<typeof startPortrait>=null;
+    try{running=startPortrait(canvas,hero,{active:latest.current.active,onFinish:()=>latest.current.onFinish()});}
+    catch{canvas.dataset.failed='true';latest.current.onFinish();}
     engine.current=running;
     if(!running){canvas.dataset.failed='true';latest.current.onFinish();}
     return ()=>{running?.dispose();engine.current=null;};

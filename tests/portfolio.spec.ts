@@ -7,7 +7,7 @@ for (const [name, width, height] of [['desktop',1440,1000],['tablet',768,1024],[
     const errors: string[] = [];
     page.on('pageerror', error => errors.push(error.message));
     await page.goto('/');
-    await page.locator('.intro-controls').waitFor({state:'detached',timeout:10000});
+    await page.locator('.intro-running').waitFor({state:'detached',timeout:10000});
     await page.evaluate(()=>document.fonts.ready);
     await expect(page.getByRole('heading',{level:1})).toHaveAccessibleName('Rich Daniel Lim');
     await expect(page.getByRole('heading',{level:1})).toBeVisible();
@@ -32,7 +32,7 @@ for (const [name, width, height] of [['desktop',1440,1000],['tablet',768,1024],[
 }
 test('keyboard: skip link, navigation, accordion, persistent contact',async({page})=>{
   await page.goto('/');
-  await page.locator('.intro-controls').waitFor({state:'detached',timeout:10000});
+  await page.locator('.intro-running').waitFor({state:'detached',timeout:10000});
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link',{name:'Skip to content'})).toBeFocused();
   await page.keyboard.press('Enter');
@@ -62,7 +62,7 @@ test('reduced motion: static readable content, no loader, particles or transform
   await page.screenshot({path:'verification/reduced-motion.png'});
 });
 test('animations run automatically without a header pause/play control',async({page})=>{
-  await page.goto('/');await page.getByRole('button',{name:'Skip intro'}).click();
+  await page.goto('/');await expect(page.locator('.intro-running')).toHaveCount(0,{timeout:11000});
   await expect(page.locator('.navigation button:not(.menu-toggle)')).toHaveCount(0);
   await expect(page.getByRole('button',{name:/pause|resume|replay/i})).toHaveCount(0);
   expect(await page.locator('.ticker-track').evaluate(el=>getComputedStyle(el).animationPlayState)).toBe('running');
@@ -75,7 +75,8 @@ test('mobile coarse pointer hides desktop cursor',async({browser})=>{
   expect(await page.locator('.screenshot-wrap').first().evaluate(el=>getComputedStyle(el).transform)).toBe('none');
   await context.close();
 });
-test('production performance under CPU and network throttling',async({page})=>{
+for(const reduced of [false,true])test(`production performance under CPU and network throttling (${reduced?'reduced motion':'automatic intro'})`,async({page})=>{
+  if(reduced)await page.emulateMedia({reducedMotion:'reduce'});
   await page.setViewportSize({width:390,height:844});
   const cdp=await page.context().newCDPSession(page);
   await cdp.send('Emulation.setCPUThrottlingRate',{rate:4});
@@ -87,15 +88,15 @@ test('production performance under CPU and network throttling',async({page})=>{
     new PerformanceObserver(list=>{for(const e of list.getEntries() as any) if(!e.hadRecentInput) (window as any).__metrics.cls+=e.value;}).observe({type:'layout-shift',buffered:true});
     new PerformanceObserver(list=>{for(const entry of list.getEntries()) (window as any).__metrics.longTasks.push(entry.duration);}).observe({type:'longtask',buffered:true});
   });
-  // Measure a cold load with the explicit Skip Intro control; full timing is tested separately.
-  await page.goto('/');await page.getByRole('button',{name:'Skip intro'}).click();
-  await page.locator('.intro-controls').waitFor({state:'detached',timeout:10000});
+  // Measure both cold-load paths. The automatic path includes the unchanged 5.5-second intro.
+  await page.goto('/');await expect(page.locator('.intro-running')).toHaveCount(0,{timeout:11000});
+  await page.locator('.intro-running').waitFor({state:'detached',timeout:10000});
   await expect(page.getByRole('heading',{level:1})).toBeVisible();
   await page.waitForTimeout(2500);
   const metrics=await page.evaluate(()=>({...((window as any).__metrics),resources:performance.getEntriesByType('resource').map((e:any)=>({name:e.name.split('/').pop(),bytes:e.transferSize})),domNodes:document.querySelectorAll('*').length}));
   console.log('THROTTLED MOBILE',JSON.stringify(metrics));
   expect(metrics.cls).toBeLessThan(.1);
-  expect(metrics.lcp).toBeLessThan(4000);
+  expect(metrics.lcp).toBeLessThan(reduced?4000:9500);
   expect(metrics.domNodes).toBeLessThan(900);
 });
 test('all static content passes automated accessibility checks',async({page})=>{

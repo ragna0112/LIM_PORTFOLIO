@@ -1,7 +1,6 @@
 import {useCallback,useEffect,useLayoutEffect,useRef,useState,type MouseEvent} from 'react';
 import {ArrowUpRight,Menu,X} from 'lucide-react';
-import {profile} from './projects';
-import {isSectionTarget,sections,type SectionId} from './sections';
+import {isSectionTarget,sections,navigationSections,type SectionId} from './sections';
 import './navigation.css';
 import {isIntroInitializing,keepIntroAtHome} from './introScroll';
 
@@ -29,7 +28,7 @@ function MobileMenu({active,onSelect,onClose,trigger}:{active:SectionId|null;onS
     if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
   }}>
     <div className="mobile-menu-heading"><span className="mono">EXPLORE</span><button ref={close} type="button" onClick={onClose} aria-label="Close navigation menu"><X size={18} aria-hidden="true"/> Close</button></div>
-    <nav aria-label="Mobile navigation">{sections.map(section=><a key={section.id} href={section.href} aria-current={active===section.id?'location':undefined} onClick={event=>onSelect(event,section.id)}><span className="section-number">{section.number}</span>{section.label}{section.id==='contact'&&<ArrowUpRight size={16} aria-hidden="true"/>}</a>)}</nav>
+    <nav aria-label="Mobile navigation">{navigationSections.map(section=><a key={section.id} href={section.href} aria-current={active===section.id?'location':undefined} onClick={event=>onSelect(event,section.id)}><span className="section-number">{section.number}</span>{section.label}{section.id==='contact'&&<ArrowUpRight size={16} aria-hidden="true"/>}</a>)}</nav>
   </dialog>;
 }
 export function Navigation(){
@@ -63,8 +62,8 @@ export function Navigation(){
     };
     const resize=new ResizeObserver(setup);resize.observe(header.current!);setup();return()=>{resize.disconnect();observer?.disconnect();};
   },[]);
-  return <header ref={header} className="navigation"><a className="logo" href="#home" aria-label={`${profile.name} home`} onClick={event=>select(event,'home')}>{profile.initials[0]}<span>·</span>{profile.initials[1]}</a>
-    <nav className="desktop-navigation" aria-label="Main navigation">{sections.map(section=><a key={section.id} href={section.href} aria-current={active===section.id?'location':undefined} onClick={event=>select(event,section.id)}>{section.label}<span className="section-number">{section.number}</span>{section.id==='contact'&&<ArrowUpRight size={13} aria-hidden="true"/>}</a>)}</nav>
+  return <header ref={header} className="navigation"><a className="logo" href="#home" aria-label="RLwork — Rich Daniel Lim, Home" onClick={event=>select(event,'home')}><img src="/branding/rlwork-header-silver.webp" width="566" height="144" alt=""/></a>
+    <nav className="desktop-navigation" aria-label="Main navigation">{navigationSections.map(section=><a key={section.id} href={section.href} aria-current={active===section.id?'location':undefined} onClick={event=>select(event,section.id)}>{section.label}<span className="section-number">{section.number}</span>{section.id==='contact'&&<ArrowUpRight size={13} aria-hidden="true"/>}</a>)}</nav>
     <button ref={trigger} type="button" className="menu-toggle" aria-label="Open navigation menu" aria-expanded={menuOpen} aria-controls={menuOpen?'mobile-navigation':undefined} aria-haspopup="dialog" onClick={()=>setMenuOpen(true)}><Menu aria-hidden="true" size={19}/> Menu</button>
     {menuOpen&&<MobileMenu active={active} onSelect={select} onClose={()=>setMenuOpen(false)} trigger={trigger.current}/>}
   </header>;

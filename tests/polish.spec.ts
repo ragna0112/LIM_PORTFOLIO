@@ -28,7 +28,7 @@ test('progress follows scroll without intercepting input',async({page})=>{
   expect(await progress.evaluate(el=>el.getBoundingClientRect().width/innerWidth)).toBeGreaterThan(.98);
 });
 test('fine-pointer magnetic links are bounded, keyboard stable and reset with reduced motion',async({page})=>{
-  await page.setViewportSize({width:1440,height:900});await page.goto('/');await page.getByRole('button',{name:'Skip intro'}).click();
+  await page.setViewportSize({width:1440,height:900});await page.goto('/');await expect(page.locator('.intro-running')).toHaveCount(0,{timeout:11000});
   const link=page.locator('#cinemetrics .project-links a').first();await link.evaluate(el=>el.scrollIntoView({behavior:'instant',block:'center'}));await page.waitForTimeout(800);
   const box=(await link.boundingBox())!;await link.hover({position:{x:box.width-6,y:box.height/2}});await page.waitForTimeout(350);
   const translate=await link.evaluate(el=>(el as HTMLElement).style.translate);expect(translate).not.toBe('');
@@ -41,14 +41,14 @@ test('fine-pointer magnetic links are bounded, keyboard stable and reset with re
 });
 test('touch disables magnetic, hover color and parallax effects',async({browser})=>{
   const context=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true});const page=await context.newPage();
-  await page.goto('http://127.0.0.1:4173/');await page.getByRole('button',{name:'Skip intro'}).click();
+  await page.goto('http://127.0.0.1:4173/');await expect(page.locator('.intro-running')).toHaveCount(0,{timeout:11000});
   const link=page.locator('#cinemetrics .project-links a').first();await link.scrollIntoViewIfNeeded();await page.waitForTimeout(750);await page.touchscreen.tap(30,300);
   expect(await link.evaluate(el=>getComputedStyle(el).translate)).toBe('none');
   expect(await page.locator('#cinemetrics .screenshot-wrap img').evaluate(el=>getComputedStyle(el).transform)).toBe('none');
   await context.close();
 });
 test('project media parallax and color stay separate from text and preserve links',async({page})=>{
-  await page.setViewportSize({width:1440,height:900});await page.goto('/');await page.getByRole('button',{name:'Skip intro'}).click();
+  await page.setViewportSize({width:1440,height:900});await page.goto('/');await expect(page.locator('.intro-running')).toHaveCount(0,{timeout:11000});
   const media=page.locator('#cinemetrics .screenshot-wrap'),img=media.locator('img');await media.scrollIntoViewIfNeeded();await page.waitForTimeout(750);
   const filter=await img.evaluate(el=>getComputedStyle(el).filter);expect(filter).toBe('grayscale(0.8)');
   await media.hover();await page.waitForTimeout(450);expect(await img.evaluate(el=>Number(getComputedStyle(el).filter.match(/grayscale\(([^)]+)\)/)?.[1]))).toBeLessThan(.001);

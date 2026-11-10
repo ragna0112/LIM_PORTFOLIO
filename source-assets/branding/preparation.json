@@ -1,222 +1,37 @@
 {
-  "source": "rlwork-silver-original.png",
+  "source": "source-assets/branding/rlwork-silver-original.png",
   "sha256": "341e3aac532a5879ae488524b816118a5666ec16819f97f71ee625f5bfbdf8cd",
-  "sourceSize": [
-    1254,
-    1254
-  ],
-  "flatSourceSupplied": false,
-  "nodes": [
-    [
-      326.5,
-      304,
-      15
-    ],
-    [
-      390,
-      374,
-      24
-    ],
-    [
-      546.5,
-      327,
-      24.5
-    ],
-    [
-      611,
-      270,
-      14
-    ],
-    [
-      616,
-      434,
-      25.5
-    ],
-    [
-      357.5,
-      507.5,
-      41
-    ],
-    [
-      326,
-      647,
-      21
-    ],
-    [
-      294,
-      728,
-      14
-    ],
-    [
-      487,
-      615,
-      25
-    ],
-    [
-      566,
-      724,
-      15
-    ],
-    [
-      693,
-      679,
-      37
-    ],
-    [
-      753,
-      761,
-      14
-    ],
-    [
-      849,
-      658,
-      23
-    ],
-    [
-      960,
-      624,
-      14
-    ],
-    [
-      742,
-      525,
-      22.5
-    ],
-    [
-      774,
-      394,
-      23.5
-    ],
-    [
-      838,
-      315,
-      14.5
-    ]
-  ],
-  "edges": [
-    [
-      0,
-      1
-    ],
-    [
-      1,
-      2
-    ],
-    [
-      2,
-      3
-    ],
-    [
-      2,
-      4
-    ],
-    [
-      4,
-      5
-    ],
-    [
-      5,
-      1
-    ],
-    [
-      5,
-      6
-    ],
-    [
-      6,
-      7
-    ],
-    [
-      5,
-      8
-    ],
-    [
-      8,
-      9
-    ],
-    [
-      8,
-      10
-    ],
-    [
-      10,
-      11
-    ],
-    [
-      10,
-      12
-    ],
-    [
-      12,
-      13
-    ],
-    [
-      10,
-      14
-    ],
-    [
-      14,
-      15
-    ],
-    [
-      15,
-      16
-    ]
-  ],
+  "symbol": {
+    "left": 276,
+    "top": 252,
+    "width": 700,
+    "height": 526
+  },
   "wordmark": {
-    "crop": {
-      "left": 390,
-      "top": 840,
-      "width": 490,
-      "height": 116
-    },
-    "threshold": 56,
-    "contours": 9,
-    "bounds": {
-      "minX": 8,
-      "maxX": 476,
-      "minY": 9,
-      "maxY": 104
-    },
-    "simplificationTolerance": 0.6
+    "left": 390,
+    "top": 840,
+    "width": 490,
+    "height": 116
+  },
+  "stacked": {
+    "left": 276,
+    "top": 252,
+    "width": 700,
+    "height": 718
   },
   "header": {
-    "width": 202,
-    "height": 48
-  },
-  "silver": {
-    "crop": {
-      "left": 252,
-      "top": 230,
-      "width": 750,
-      "height": 740
-    },
-    "width": 640,
-    "height": 631,
-    "blackMatteRetained": true
+    "width": 566,
+    "height": 144
   },
   "favicon": {
     "sizes": [
       16,
       32,
-      48
+      48,
+      180
     ],
     "opaqueBlack": true,
-    "tinyOmittedTerminalIndices": [
-      0,
-      3,
-      7,
-      9,
-      11,
-      13,
-      16
-    ],
-    "strokePixels": {
-      "16": 1,
-      "32": 1.15,
-      "48": 1.35,
-      "180": 2.6
-    }
+    "sourceGeometryPreserved": true
   },
   "manifestPresent": false
 }

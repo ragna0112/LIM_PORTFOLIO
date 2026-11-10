@@ -44,7 +44,7 @@ test('DPR and live resize/orientation regenerate one shared CSS-pixel scale',asy
   await context.close();
 });
 test('atmosphere is eased, pointer-transparent, offscreen-suspended and static with reduced motion',async({page})=>{
-  await page.setViewportSize({width:1440,height:900});await page.goto('/');await page.getByRole('button',{name:'Skip intro'}).click();
+  await page.setViewportSize({width:1440,height:900});await page.goto('/');await expect(page.locator('.intro-running')).toHaveCount(0,{timeout:11000});
   const canvas=page.locator('.portrait-canvas'),atmosphere=page.locator('.hero-atmosphere'),hero=page.locator('.hero');
   await expect(canvas).toHaveAttribute('data-ready','true');await expect(canvas).toHaveAttribute('data-field-count','96');
   expect(await atmosphere.evaluate(el=>getComputedStyle(el).pointerEvents)).toBe('none');

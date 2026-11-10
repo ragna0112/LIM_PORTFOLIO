@@ -2,10 +2,12 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { MotionConfig, motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { ArrowUpRight, ArrowDown, ArrowUp, Plus, Minus, Github } from 'lucide-react';
-import { profile, projects, resume, type ProjectConfig } from './projects';
+import { profile, projects, resume, experience, type ProjectConfig } from './projects';
 import { ProjectGallery } from './ProjectGallery';
 import './gallery.css';
 import './style.css';
+import './branding.css';
+import './experience.css';
 import { PortraitHero } from './PortraitHero';
 import './portrait.css';
 import {ScrollProgress,useMagneticLinks} from './InteractionPolish';
@@ -87,7 +89,6 @@ function App() {
   const finishIntro=useCallback(()=>{
     finishIntroPosition();
     setLoading(false);
-    if(document.activeElement?.classList.contains('skip-intro')) {const home=document.getElementById('home');if(home){home.tabIndex=-1;home.focus({preventScroll:true});}}
   },[]);
   useEffect(()=>{
     const query=matchMedia('(prefers-reduced-data: reduce)');
@@ -98,19 +99,20 @@ function App() {
     return ()=>{query.removeEventListener('change',change);motionQuery.removeEventListener('change',change);connection?.removeEventListener('change',change);};
   },[]);
   useEffect(()=>{ if(staticMode)finishIntro(); },[staticMode,finishIntro]);
+  // A stalled asset or renderer must never leave the page locked behind the intro.
+  useEffect(()=>{if(!loading)return;const fallback=window.setTimeout(finishIntro,9000);return()=>window.clearTimeout(fallback);},[loading,finishIntro]);
   const [open, setOpen] = useState<number | null>(0);
 
-  return <MotionConfig reducedMotion="user"><div className={`site ${loading?'intro-running':''}`} onFocusCapture={event=>{if(loading&&!(event.target as HTMLElement).closest('.skip-intro'))finishIntro();}}>
-    {loading && <div className="intro-controls"><button className="skip-intro" onClick={finishIntro}>Skip intro <ArrowUpRight size={14}/></button><p className="sr-only" role="status">Introduction playing. You can skip it or continue navigating.</p></div>}
+  return <MotionConfig reducedMotion="user"><div className={`site ${loading?'intro-running':''}`} onFocusCapture={()=>{if(loading)finishIntro();}}>
     <a className="skip" href="#main">Skip to content</a><ScrollProgress/>
     <Navigation/>
     <main id="main"><section className="hero portrait-hero" id="home" aria-labelledby="hero-title">
       <PortraitHero active={loading} staticMode={staticMode} onFinish={finishIntro}/>
       <motion.div className="hero-content" initial={{opacity:staticMode?0:1}} animate={{opacity:1}} transition={{duration:.18}}>
-        <div className="hero-top mono"><span><i className="status-dot"/> {profile.title.toUpperCase()}</span><span>{profile.location.toUpperCase()} <span className="tiny-star">✳</span></span></div>
-        <div className="hero-identity"><span className="mono hero-kicker">{profile.shortLabel.toUpperCase()}</span>
+        <div className="hero-top mono"><span><i className="status-dot"/> {profile.location.toUpperCase()}</span><span className="tiny-star" aria-hidden="true">✳</span></div>
+        <div className="hero-identity">
           <h1 id="hero-title" tabIndex={-1} aria-label={profile.name}><span className="chrome">{profile.displayName[0]}</span><span className="chrome">{profile.displayName[1]}<span className="hero-period">.</span></span></h1>
-          <p className="hero-role">{profile.title}<br/>{profile.specialization}</p>
+          <p className="hero-role">{profile.title} <span>· {profile.specialization}</span></p>
         </div>
         <div className="hero-bottom"><p>{profile.heroDescription}</p><a className="round-link" href="#work"><span>EXPLORE MY WORK</span><span className="round-icon"><ArrowDown size={19}/></span></a></div>
         <div className="hero-foot mono"><span>CODE WITH PURPOSE. BUILD WITH CURIOSITY.</span><span>SCROLL TO DISCOVER ↓</span></div>
@@ -119,11 +121,15 @@ function App() {
       <section id="work" className="work section-pad" aria-labelledby="work-title"><Reveal className="section-heading"><div><span className="eyebrow mono">{sectionEyebrow('work')}</span><h2 id="work-title">Data. Design.<br/><span>Real-world context.</span></h2></div><p>{profile.selectedWorkIntroduction}</p></Reveal>{projects.map((project,index)=><Project key={project.id} project={project} index={index}/>)}</section>
       <div className="ticker" role="region" aria-label={`Technologies: ${profile.technologyTicker.join(', ')}`}><div className="ticker-track" aria-hidden="true">{[0,1].map(i=><span key={i}>{profile.technologyTicker.map(technology=><React.Fragment key={technology}>{technology.toUpperCase()} <b>✳</b> </React.Fragment>)}</span>)}</div></div>
       <section className="capabilities section-pad" aria-labelledby="cap-title"><Reveal className="cap-intro"><span className="eyebrow mono">WHAT I BRING</span><h2 id="cap-title">From an idea<br/>to <span>real use.</span></h2><p>A growing toolkit, put into practice.<br/>Here’s how I approach the work.</p></Reveal><div className="accordion">{profile.capabilities.map(({number,title,description,tools},i)=><div className={`capability ${open===i?'is-open':''}`} key={title}><h3><button id={`cap-button-${i}`} aria-expanded={open===i} aria-controls={`cap-panel-${i}`} onClick={()=>setOpen(open===i?null:i)}><span className="mono">{number}</span><span>{title}</span>{open===i?<Minus size={20}/>:<Plus size={20}/>}</button></h3><div id={`cap-panel-${i}`} role="region" aria-labelledby={`cap-button-${i}`} hidden={open!==i}><p>{description}</p><span className="mono cap-tools">{tools}</span></div></div>)}</div></section>
-      <section className="about section-pad" id="about" aria-labelledby="about-title"><Reveal className="about-mark" aria-hidden="true"><div className="monogram">{profile.monogram}<span>✳</span></div><span className="mono">ALWAYS A WORK IN PROGRESS.</span></Reveal><Reveal className="about-copy"><span className="eyebrow mono">{sectionEyebrow('about')}</span><h2 id="about-title">Curiosity drives it.<br/><span>Building makes it real.</span></h2><p>{profile.aboutDescription}</p><p>{profile.aboutShortDescription}</p><a className="text-link" href={profile.githubUrl} target="_blank" rel="noopener noreferrer">More of what I’m building <Github size={17}/><ArrowUpRight size={16}/><span className="sr-only"> on GitHub (opens in a new tab)</span></a><a className="text-link resume-about" href={resume.url} target="_blank" rel="noopener noreferrer" aria-label={resume.accessibleLabel}>View Full Resume <ArrowUpRight aria-hidden="true" size={17}/></a></Reveal></section>
+      <section className="about section-pad" id="about" aria-labelledby="about-title"><Reveal className="about-mark" aria-hidden="true"><img className="about-brand" src="/branding/rlwork-footer-silver.webp" width="640" height="656" alt="" loading="lazy"/><span className="mono">ALWAYS A WORK IN PROGRESS.</span></Reveal><Reveal className="about-copy"><span className="eyebrow mono">{sectionEyebrow('about')}</span><h2 id="about-title">Curiosity drives it.<br/><span>Building makes it real.</span></h2><p>{profile.aboutDescription}</p><p>{profile.aboutShortDescription}</p><a className="text-link" href={profile.githubUrl} target="_blank" rel="noopener noreferrer">More of what I’m building <Github size={17}/><ArrowUpRight size={16}/><span className="sr-only"> on GitHub (opens in a new tab)</span></a><a className="text-link resume-about" href={resume.url} target="_blank" rel="noopener noreferrer" aria-label={resume.accessibleLabel}>View Full Resume <ArrowUpRight aria-hidden="true" size={17}/></a></Reveal></section>
       <Credentials/>
+      <section id="experience" className="experience section-pad" aria-labelledby="experience-title">
+        <Reveal className="section-heading"><div><span className="eyebrow mono">{sectionEyebrow('experience')}</span><h2 id="experience-title">Experience</h2></div></Reveal>
+        <div className="experience-list">{experience.map(entry=><Reveal key={entry.id} className="experience-entry"><h3>{entry.title}</h3><div className="experience-meta"><span className="experience-organization">{entry.organization}</span><time dateTime={entry.startDate}>{entry.dates}</time><span className="experience-category mono">{entry.category}</span></div></Reveal>)}</div>
+      </section>
       <GameSection/>
       <section className="contact section-pad" id="contact" aria-labelledby="contact-title"><Reveal><span className="eyebrow mono">{sectionEyebrow('contact')}</span><div className="contact-pre mono"><span><i className="status-dot"/> GOOD WORK STARTS WITH A CONVERSATION</span><span>LET’S MAKE SOMETHING USEFUL.</span></div><h2 className="dot-type" id="contact-title">LET’S<br/>CONNECT<span>↗</span></h2><div className="contact-bottom"><p>Have a question, an idea, or a project in mind?<br/><span>Find me on GitHub. Let’s start there.</span></p><div className="contact-socials"><a className="contact-link social-link" href={profile.linkedinUrl} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${profile.name} on LinkedIn (opens in a new tab)`}>LinkedIn <ArrowUpRight aria-hidden="true" size={23}/></a><a className="contact-link" href={profile.githubUrl} target="_blank" rel="noopener noreferrer">Say hello on GitHub <ArrowUpRight size={23}/><span className="sr-only"> (opens in a new tab)</span></a><ResumeActions/></div></div></Reveal></section>
-    </main><footer><span className="logo">{profile.initials[0]}<span>·</span>{profile.initials[1]}</span><span className="mono">© {new Date().getFullYear()} {profile.name.toUpperCase()}</span><div className="footer-links"><a className="social-link" href={profile.githubUrl} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${profile.name} on GitHub (opens in a new tab)`}>GitHub <ArrowUpRight aria-hidden="true" size={12}/></a><a className="social-link" href={profile.linkedinUrl} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${profile.name} on LinkedIn (opens in a new tab)`}>LinkedIn <ArrowUpRight aria-hidden="true" size={12}/></a><ResumeActions/><a href="#home" className="mono">BACK TO TOP <ArrowUp size={14}/></a></div></footer><a className="connect-pill" href="#contact"><span className="status-dot"/> Let’s connect <ArrowUpRight size={16}/></a><Cursor/>
+    </main><footer><span className="footer-brand"><img src="/branding/rlwork-footer-silver.webp" width="640" height="656" alt="RLwork" loading="lazy" decoding="async"/></span><span className="mono">© {new Date().getFullYear()} {profile.name.toUpperCase()}</span><div className="footer-links"><a className="social-link" href={profile.githubUrl} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${profile.name} on GitHub (opens in a new tab)`}>GitHub <ArrowUpRight aria-hidden="true" size={12}/></a><a className="social-link" href={profile.linkedinUrl} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${profile.name} on LinkedIn (opens in a new tab)`}>LinkedIn <ArrowUpRight aria-hidden="true" size={12}/></a><ResumeActions/><a href="#home" className="mono">BACK TO TOP <ArrowUp size={14}/></a></div></footer><a className="connect-pill" href="#contact"><span className="status-dot"/> Let’s connect <ArrowUpRight size={16}/></a><Cursor/>
   </div></MotionConfig>;
 }
 createRoot(document.getElementById('root')!).render(<React.StrictMode><App/></React.StrictMode>);

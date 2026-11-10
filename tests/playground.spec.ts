@@ -5,7 +5,7 @@ import {GAME_LETTERS} from '../src/playground/gameConfig';
 import {projects} from '../src/projects';
 type Snapshot={phase:string;active:boolean;near:boolean;collected:number;player:{x:number;y:number};target:{x:number;y:number}|null;obstacles:{x:number;y:number;width:number;height:number}[];width:number;height:number};
 const state=(page:Page)=>page.locator('.playground-canvas').evaluate(c=>JSON.parse((c as HTMLCanvasElement).dataset.gameState!) as Snapshot);
-async function openGame(page:Page){await page.goto('/');const skip=page.getByRole('button',{name:'Skip intro'});if(await skip.count())await skip.click();await page.locator('#game').scrollIntoViewIfNeeded();await expect(page.getByRole('button',{name:'Start Game',exact:true})).toBeVisible();await expect.poll(async()=>(await state(page)).near).toBe(true);}
+async function openGame(page:Page){await page.goto('/');await expect(page.locator('.intro-running')).toHaveCount(0,{timeout:11000});await page.locator('#game').scrollIntoViewIfNeeded();await expect(page.getByRole('button',{name:'Start Game',exact:true})).toBeVisible();await expect.poll(async()=>(await state(page)).near).toBe(true);}
 
 test('model: boundaries, obstacles, acceleration, ordered collection and verified skills',()=>{
  const model=new GameModel();model.resize(1000,620);model.start();
@@ -17,10 +17,10 @@ test('model: boundaries, obstacles, acceleration, ordered collection and verifie
  expect(model.phase).toBe('complete');const x=model.player.x;model.keys.add('right');model.step(1);expect(model.player.x).toBe(x);model.reset();expect(model.collected).toBe(0);expect(model.phase).toBe('ready');
  const verified=new Set(projects.flatMap(p=>p.tags));expect(GAME_LETTERS.every(item=>verified.has(item.skill))).toBeTruthy();expect(GAME_LETTERS.map(item=>item.letter).join('')).toBe('HELLOWORLD');
 });
-test('embedded after Credentials and before Contact with inline Play anchor, no modal or scroll lock; scoped keyboard, Stop, Resume and Restart',async({page})=>{
+test('embedded after Experience and before Contact with preserved game anchor, no modal or scroll lock; scoped keyboard, Stop, Resume and Restart',async({page})=>{
  await openGame(page);
- expect(await page.locator('#game').evaluate(el=>[el.previousElementSibling?.id,el.nextElementSibling?.id])).toEqual(['credentials','contact']);
- expect(await page.locator('main>section[id]').evaluateAll(elements=>elements.map(el=>el.id))).toEqual(['home','work','about','credentials','game','contact']);
+ expect(await page.locator('#game').evaluate(el=>[el.previousElementSibling?.id,el.nextElementSibling?.id])).toEqual(['experience','contact']);
+ expect(await page.locator('main>section[id]').evaluateAll(elements=>elements.map(el=>el.id))).toEqual(['home','work','about','credentials','experience','game','contact']);
  await expect(page.locator('nav').getByText('Playground')).toHaveCount(0);await expect(page.locator('#game dialog,dialog[open]')).toHaveCount(0);
  expect(await page.evaluate(()=>document.body.style.position)).toBe('');
  const start=page.getByRole('button',{name:'Start Game',exact:true});await start.focus();let y=await page.evaluate(()=>scrollY);await page.keyboard.press('ArrowDown');await page.waitForTimeout(350);expect(await page.evaluate(()=>scrollY)).toBeGreaterThan(y);expect((await state(page)).phase).toBe('ready');
@@ -105,7 +105,7 @@ test('complete all letters using real keyboard input, reveal skills, play again 
  await expect(page.getByText('Thanks for exploring my portfolio.',{exact:true})).toBeVisible();await page.waitForTimeout(1000);await page.locator('#game').screenshot({path:'verification/embedded-game/completed.png'});
  const complete=await state(page);await page.keyboard.press('ArrowRight');expect((await state(page)).player).toEqual(complete.player);
  if(round===0){await page.getByRole('button',{name:'Play Again',exact:true}).click();expect((await state(page)).collected).toBe(0);expect((await state(page)).phase).toBe('playing');await expect(page.locator('.game-arena')).toBeFocused();
- await expect(page.locator('.intro-controls')).toHaveCount(0);
+ await expect(page.locator('.intro-running')).toHaveCount(0);
  }
  }
  await page.locator('.game-completion').getByRole('link',{name:'Let’s Connect ↓'}).click();await expect(page.locator('#contact')).toBeFocused();await expect.poll(async()=>Math.abs((await page.locator('#contact').boundingBox())!.y-100),{timeout:3000}).toBeLessThan(5);

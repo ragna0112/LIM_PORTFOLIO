@@ -1,0 +1,8 @@
+/* Artwork dimensions reserve space before decoding; no animated branding. */
+.navigation .logo{display:flex;align-items:center;flex-shrink:0;min-height:44px;line-height:1;letter-spacing:normal}
+.navigation .logo img{display:block;width:auto;height:44px;mix-blend-mode:screen}
+.footer-brand{display:block;flex:0 0 112px;width:112px}
+.footer-brand img{display:block;width:100%;height:auto;mix-blend-mode:screen}
+@media(max-width:650px){.navigation .logo img{height:34px}.footer-brand{flex-basis:100px;width:100px}}
+
+.about-brand{display:block;width:min(80%,300px);height:auto;mix-blend-mode:screen}

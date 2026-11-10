@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test('every page load plays ball, individual words, scatter, portrait in about 5.5 seconds',async({page})=>{
   await page.setViewportSize({width:1440,height:1000});await page.goto('/');
   const canvas=page.locator('.portrait-canvas');
-  await expect(page.getByRole('button',{name:'Skip intro'})).toBeVisible();
+  await expect(page.locator('.intro-running')).toHaveCount(1);
   await expect(canvas).toHaveAttribute('data-phase','ball');
   const started=Date.now();
   for(const phase of ['rich-daniel','lim','portfolio','portrait-transition','portrait']){
@@ -15,26 +15,18 @@ test('every page load plays ball, individual words, scatter, portrait in about 5
   await expect(page.getByRole('button',{name:'Skip intro'})).toHaveCount(0);
   await expect(page.getByRole('heading',{level:1})).toHaveAccessibleName('Rich Daniel Lim');
   expect(await canvas.getAttribute('data-particles')).toBe('16000');
-  await page.reload();await expect(page.getByRole('button',{name:'Skip intro'})).toBeVisible();
+  await page.reload();await expect(page.locator('.intro-running')).toHaveCount(1);
   await expect(canvas).toHaveAttribute('data-phase','ball');
   await expect(page.getByRole('button',{name:/replay/i})).toHaveCount(0);
 });
-test('keyboard skip applies only to the current load, with unrestricted navigation',async({page})=>{
-  await page.goto('/');await page.keyboard.press('Tab');
-  const skip=page.getByRole('button',{name:'Skip intro'});
-  await expect(skip).toBeFocused();await page.keyboard.press('Enter');
-  await expect(page.locator('.intro-controls')).toHaveCount(0);
-  await expect(page.locator('#home')).toBeFocused();
-  await page.reload();await expect(skip).toBeVisible();
-  await page.keyboard.press('Tab');await expect(skip).toBeFocused();
-  await page.keyboard.press('Tab');
-  await expect(page.getByRole('link',{name:'Skip to content'})).toBeFocused();
-  await expect(page.locator('.intro-controls')).toHaveCount(0);
-  await page.reload();await expect(skip).toBeVisible();
+test('no intro control in the keyboard order; ordinary navigation remains accessible',async({page})=>{
+ await page.goto('/');await expect(page.getByRole('button',{name:/skip intro|replay/i})).toHaveCount(0);
+ await page.keyboard.press('Tab');await expect(page.getByRole('link',{name:'Skip to content'})).toBeFocused();
+ await expect(page.locator('.intro-running')).toHaveCount(0);await expect(page.locator('.skip-intro')).toHaveCount(0);
 });
 test('portrait-only desktop interaction and return',async({page})=>{
   await page.setViewportSize({width:1440,height:1000});
-  await page.goto('/');await page.getByRole('button',{name:'Skip intro'}).click();
+  await page.goto('/');await expect(page.locator('.intro-running')).toHaveCount(0,{timeout:11000});
   const canvas=page.locator('.portrait-canvas');
   await expect(canvas).toHaveAttribute('data-ready','true');
   await page.mouse.move(1100,320);await expect(canvas).toHaveAttribute('data-interacting','true');
@@ -44,22 +36,22 @@ test('portrait-only desktop interaction and return',async({page})=>{
 });
 test('reduced motion receives the static short fade on every refresh',async({page})=>{
   await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/');
-  await expect(page.locator('.intro-controls')).toHaveCount(0);await expect(page.locator('.portrait-canvas')).toHaveCount(0);
+  await expect(page.locator('.intro-running')).toHaveCount(0);await expect(page.locator('.portrait-canvas')).toHaveCount(0);
   await expect(page.locator('.portrait-fallback')).toBeVisible();
   await page.reload();
-  await expect(page.locator('.intro-controls')).toHaveCount(0);
+  await expect(page.locator('.intro-running')).toHaveCount(0);
   await expect(page.locator('.portrait-fallback')).toBeVisible();
   await expect(page.getByRole('button',{name:/replay/i})).toHaveCount(0);
 });
 test('save-data skips intro and requests only dot fallback',async({page})=>{
   await page.addInitScript(()=>{Object.defineProperty(navigator,'connection',{value:{saveData:true,addEventListener(){},removeEventListener(){}}});});
-  await page.goto('/');await expect(page.locator('.intro-controls')).toHaveCount(0);
+  await page.goto('/');await expect(page.locator('.intro-running')).toHaveCount(0);
   await expect(page.locator('.portrait-canvas')).toHaveCount(0);await expect(page.locator('.portrait-fallback')).toBeVisible();
   expect(await page.evaluate(()=>performance.getEntriesByType('resource').some(e=>e.name.includes('rich-mask')))).toBeFalsy();
 });
 test('Canvas unavailable preserves an optimized portrait and readable hero',async({page})=>{
   await page.addInitScript(()=>{HTMLCanvasElement.prototype.getContext=(()=>null) as typeof HTMLCanvasElement.prototype.getContext;});
-  await page.goto('/');await expect(page.locator('.intro-controls')).toHaveCount(0);
+  await page.goto('/');await expect(page.locator('.intro-running')).toHaveCount(0);
   await expect(page.locator('.portrait-fallback')).toBeVisible();await expect(page.getByRole('heading',{level:1})).toBeVisible();
 });
 test('intro never reads or writes browser storage and still runs on refresh',async({page})=>{
@@ -68,9 +60,9 @@ test('intro never reads or writes browser storage and still runs on refresh',asy
     for(const key of ['sessionStorage','localStorage']) Object.defineProperty(window,key,{get(){throw new Error('Unexpected persistent storage access');}});
     Object.defineProperty(document,'cookie',{get(){throw new Error('Unexpected cookie access');},set(){throw new Error('Unexpected cookie write');}});
   });
-  await page.goto('/');await page.getByRole('button',{name:'Skip intro'}).click();
-  await expect(page.locator('.intro-controls')).toHaveCount(0);
-  await page.reload();await expect(page.getByRole('button',{name:'Skip intro'})).toBeVisible();
+  await page.goto('/');await expect(page.locator('.intro-running')).toHaveCount(0,{timeout:11000});
+  await expect(page.locator('.intro-running')).toHaveCount(0);
+  await page.reload();await expect(page.locator('.intro-running')).toHaveCount(1);
   await expect(page.locator('.portrait-canvas')).toHaveAttribute('data-phase','ball');
   expect(errors).toEqual([]);
 });
@@ -91,4 +83,24 @@ test('touch intro timing, responsive budget and offscreen suspension',async({bro
   const frozen=await canvas.evaluate(c=>(c as HTMLCanvasElement).toDataURL());
   await page.waitForTimeout(350);expect(await canvas.evaluate(c=>(c as HTMLCanvasElement).toDataURL())).toBe(frozen);
   await context.close();
+});
+
+test('stalled renderer timeline still releases the intro at Home',async({page})=>{
+ test.setTimeout(18000);
+ // Suspend the renderer's timeline while allowing the independent timer to run.
+ await page.addInitScript(()=>{Object.defineProperty(document,'hidden',{configurable:true,get:()=>true});});
+ await page.goto('/#work');
+ await expect(page.locator('.intro-running')).toHaveCount(0,{timeout:11500});
+ await expect.poll(()=>page.evaluate(()=>document.documentElement.style.overflow)).toBe('');
+ expect(await page.evaluate(()=>scrollY)).toBe(0);expect(await page.evaluate(()=>location.hash)).toBe('');
+ await expect(page.locator('#hero-title')).toBeVisible();
+});
+
+test('failed portrait asset and renderer exception reveal Home',async({page})=>{
+ await page.route('**/images/rich-mask.webp',route=>route.abort());
+ await page.goto('/#work');await expect(page.locator('.intro-running')).toHaveCount(0,{timeout:11000});
+ await expect.poll(()=>page.evaluate(()=>document.documentElement.style.overflow)).toBe('');expect(await page.evaluate(()=>scrollY)).toBe(0);
+ await page.unroute('**/images/rich-mask.webp');
+ await page.addInitScript(()=>{HTMLCanvasElement.prototype.getContext=(()=>{throw new Error('Renderer unavailable');}) as typeof HTMLCanvasElement.prototype.getContext;});
+ await page.reload();await expect(page.locator('.intro-running')).toHaveCount(0);await expect(page.locator('#hero-title')).toBeVisible();expect(await page.evaluate(()=>scrollY)).toBe(0);
 });

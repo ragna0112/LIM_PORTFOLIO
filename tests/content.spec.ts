@@ -4,7 +4,7 @@ import { profile,projects } from '../src/projects';
 
 test('student profile, project order, exact URLs and safe external links',async({page})=>{
   await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/');
-  await expect(page.locator('.hero-role')).toHaveText('Computer Science StudentSoftware Engineering');
+  await expect(page.locator('.hero-role')).toHaveText('Computer Science Student · Software Engineering');
   await expect(page.locator('.hero-bottom>p')).toHaveText(profile.heroDescription);
   await expect(page.locator('.about-copy')).toContainText(profile.aboutDescription);
   await expect(page.locator('.project-copy h3')).toHaveText(['CineMetrics','PanahonPH','QuakePH','LAMS DocuFlow']);

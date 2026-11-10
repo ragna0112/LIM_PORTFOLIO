@@ -4,11 +4,11 @@ import {createHash} from 'node:crypto';
 import {readFile,readdir} from 'node:fs/promises';
 import {credentials,resume} from '../src/projects';
 const digest=(bytes:Buffer)=>createHash('sha256').update(bytes).digest('hex');
-async function visit(page:Page,reduced=true){if(reduced)await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/');if(!reduced)await page.getByRole('button',{name:'Skip intro'}).click();await page.locator('#credentials').scrollIntoViewIfNeeded();await page.evaluate(()=>document.fonts.ready);}
+async function visit(page:Page,reduced=true){if(reduced)await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/');if(!reduced)await expect(page.locator('.intro-running')).toHaveCount(0,{timeout:11000});await page.locator('#credentials').scrollIntoViewIfNeeded();await page.evaluate(()=>document.fonts.ready);}
 
 test('exact five selected credentials, correct source mapping, preserved files and production assets',async({page,request})=>{
  await visit(page);
- expect(await page.locator('#credentials').evaluate(el=>[el.previousElementSibling?.id,el.nextElementSibling?.id])).toEqual(['about','game']);
+ expect(await page.locator('#credentials').evaluate(el=>[el.previousElementSibling?.id,el.nextElementSibling?.id])).toEqual(['about','experience']);
  expect(await page.locator('#game').evaluate(el=>el.nextElementSibling?.id)).toBe('contact');
  await expect(page.locator('.credential-row')).toHaveCount(5);
  const expected=[

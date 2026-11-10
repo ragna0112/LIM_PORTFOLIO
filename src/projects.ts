@@ -36,7 +36,7 @@ export const profile = {
   title: 'Computer Science Student',
   specialization: 'Software Engineering',
   shortLabel: 'Computer Science · Software Engineering',
-  heroDescription: 'Computer Science student specializing in Software Engineering, building practical and user-focused digital experiences.',
+  heroDescription: 'I build practical web applications and turn real-world data into useful digital experiences.',
   aboutDescription: 'I’m a Computer Science student specializing in Software Engineering, focused on building practical and user-friendly applications. I enjoy turning ideas and real-world information into reliable software through web development, API integration, databases, and thoughtful interface design.',
   aboutShortDescription: 'Seeking Software Engineering internship opportunities to learn, contribute, and build useful software with a team.',
   location: 'Based in the Philippines',
@@ -144,3 +144,17 @@ export const resume = {
   filename: 'Rich-Daniel-Lim-Resume.pdf',
   accessibleLabel: 'View Rich Daniel Lim’s full resume',
 };
+
+export interface ExperienceEntry {
+  id: string;
+  title: string;
+  organization: string;
+  startDate: string;
+  dates: string;
+  category: 'Internship' | 'Scholarship / Learning Experience';
+}
+// Verified titles, organizations and dates only; responsibilities await supplied details.
+export const experience: ExperienceEntry[] = [
+  {id:'flyrank',title:'Machine Learning Engineering Intern',organization:'FlyRank',startDate:'2026-07',dates:'July 2026 – Present',category:'Internship'},
+  {id:'datacamp',title:'DataCamp Scholar',organization:'Data Engineer Pilipinas',startDate:'2026-07',dates:'July 2026 – Present',category:'Scholarship / Learning Experience'},
+];
